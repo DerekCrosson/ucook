@@ -3,23 +3,23 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
+import IngredientsScreen from '../screens/IngredientsScreen';
 
-const HomeStack = createStackNavigator(
+const IngredientsStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    IngredientsScreen: IngredientsScreen,
     SearchIngredients: SearchIngredientsScreen,
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'IngredientsScreen'
   } 
 );
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+IngredientsStack.navigationOptions = {
+  tabBarLabel: 'IngredientsScreen',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -61,7 +61,7 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  HomeStack,
+  IngredientsStack: IngredientsStack,
   LinksStack,
   SettingsStack,
 });

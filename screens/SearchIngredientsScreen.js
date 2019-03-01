@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 
 export default class SearchIngredientsScreen extends React.Component {
   static navigationOptions = {
@@ -9,7 +9,7 @@ export default class SearchIngredientsScreen extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        Hello
+        <Text>Hello</Text>
       </ScrollView>
     );
   }
