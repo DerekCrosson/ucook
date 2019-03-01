@@ -6,10 +6,17 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    SearchIngredients: SearchIngredientsScreen,
+  },
+  {
+    initialRouteName: 'Home'
+  } 
+);
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
