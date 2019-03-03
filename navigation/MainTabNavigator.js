@@ -8,13 +8,26 @@ import SettingsScreen from '../screens/SettingsScreen';
 import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
 import IngredientsScreen from '../screens/IngredientsScreen';
 
+const defaultNavigationOptions = {
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  },
+}
+
 const IngredientsStack = createStackNavigator(
   {
     IngredientsScreen: IngredientsScreen,
     SearchIngredients: SearchIngredientsScreen,
   },
   {
-    initialRouteName: 'IngredientsScreen'
+    initialRouteName: 'IngredientsScreen',
+    ...defaultNavigationOptions
   } 
 );
 

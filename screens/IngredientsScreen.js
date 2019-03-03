@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { WebBrowser } from 'expo';
 
 import { Icon } from 'react-native-elements';
 
@@ -14,13 +13,14 @@ export default class IngredientsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerRight: (
- 
         <View style={styles.searchIcon}>
           <Icon
             name='search'
+            color='white'
+            underlayColor='black'
             style={styles.searchIcon}
             onPress={() => navigation.navigate('SearchIngredients')} 
-          />
+          /> 
         </View>
       )
     }
@@ -29,7 +29,6 @@ export default class IngredientsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
             <Image
