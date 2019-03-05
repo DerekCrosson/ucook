@@ -8,11 +8,13 @@ import SettingsScreen from '../screens/SettingsScreen';
 import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
 import IngredientsScreen from '../screens/IngredientsScreen';
 import Colors from '../constants/Colors';
+import {MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons'
 
 const defaultNavigationOptions = {
   defaultNavigationOptions: {
+    title: 'UCOOK',
     headerStyle: {
-      backgroundColor: Colors.primary,
+      backgroundColor: Colors.primary, 
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -38,53 +40,53 @@ IngredientsStack.navigationOptions = {
     activeTintColor: Colors.primary
   },
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+    <MaterialCommunityIcons
+      name='food-variant'
+      size={26}
+      style={{ marginBottom: -3 }}
+      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
+const RecipesStack = createStackNavigator({
   Links: LinksScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+RecipesStack.navigationOptions = {
+  tabBarLabel: 'Recipes',
   tabBarOptions: {
     activeTintColor: Colors.primary
   },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name='ios-create'
     />
   ),
 };
 
-const SettingsStack = createStackNavigator({
+const ShoppingListStack = createStackNavigator({
   Settings: SettingsScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+ShoppingListStack.navigationOptions = {
+  tabBarLabel: 'Shopping',
   tabBarOptions: {
     activeTintColor: Colors.primary
   },
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+    <MaterialIcons
+      name='shopping-cart'
+      size={26}
+      style={{ marginBottom: -3 }}
+      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
 };
 
 export default createBottomTabNavigator({
   IngredientsStack: IngredientsStack,
-  LinksStack,
-  SettingsStack,
+  LinksStack: RecipesStack,
+  SettingsStack: ShoppingListStack,
 });
