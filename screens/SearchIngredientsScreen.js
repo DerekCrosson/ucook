@@ -30,8 +30,12 @@ export default class SearchIngredientsScreen extends React.Component {
           search: searchValue
         }
       })
-      .then(res => {
-        const ingredients = res.data;
+      .then(async (res) => {
+        const ingredients = res.data || [];
+        // TODO add ticked to ingredients if user already has saved
+        // ingredients.map(i => {
+        //   return savedIng.find(item => item._id === i._id) ? Object.assign({}, i, {ticked: true}) : i;
+        // });
         this.setState({ ingredients });
       })
       .catch(error => {
@@ -41,24 +45,29 @@ export default class SearchIngredientsScreen extends React.Component {
   }
 
   addIngredient(ingredient){
-    axios({
-      method: 'post',
-      url: `${config.ucookApi}/user/${config.mainUser}/ingredient`,
-      data: ingredient
-    })
-    .then(() => {
-      const ingredients = this.state.ingredients.map(i => {
-        return ingredient._id === i._id ? Object.assign({}, i, {ticked: true}) : i;
-      });
-      this.setState({ ingredients });
-    })
-    .catch(error => {
-      console.error(error);
-    })
+    axios.post(`${config.ucookApi}/user/${config.mainUser}/ingredient`, ingredient)
+      .then(() => {
+        const ingredients = this.state.ingredients.map(i => {
+          return ingredient._id === i._id ? Object.assign({}, i, {ticked: true}) : i;
+        });
+        this.setState({ ingredients });
+      })
+      .catch(error => {
+        console.error(error);
+      })
   }
 
-  removeIngredient() {
-
+  removeIngredient(ingredient) {
+    axios.delete(`${config.ucookApi}/user/${config.mainUser}/ingredient/${ingredient._id}`)
+      .then(() => {
+        const ingredients = this.state.ingredients.map(i => {
+          return ingredient._id === i._id ? Object.assign({}, i, {ticked: false}) : i;
+        });
+        this.setState({ ingredients });
+      })
+      .catch(error => {
+        console.error(error);
+      })
   }
 
   render() {

@@ -11,7 +11,6 @@ import {
 import axios from 'axios';
 import { Icon } from 'react-native-elements';
 import { config } from '../constants/Config';
-import asyncStore from '../storage/asyncStore';
 import { IngredientsList } from '../components/IngredientsList';
 
 export default class IngredientsScreen extends React.Component {
@@ -37,17 +36,19 @@ export default class IngredientsScreen extends React.Component {
   }
 
   componentDidMount(){
-    this.props.navigation.addListener('didFocus', () => {
-      axios.get(`${config.ucookApi}/user/${config.mainUser}/ingredient`)
-        .then(res => {
-          const ingredients = res.data;
-          asyncStore.setUserIngredients(ingredients);
-          this.setState({ ingredients });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    });
+    this.props.navigation.addListener('didFocus', () => this.getUserIngredients());
+  }
+
+  getUserIngredients = async () => {
+    axios.get(`${config.ucookApi}/user/${config.mainUser}/ingredient`)
+      .then(async res => {
+        const ingredients = res.data;
+        // save in redux state
+        this.setState({ ingredients });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -73,17 +74,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
+  }
 });

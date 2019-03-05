@@ -12,7 +12,7 @@ import Colors from '../constants/Colors';
 const defaultNavigationOptions = {
   defaultNavigationOptions: {
     headerStyle: {
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.primary,
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -34,6 +34,9 @@ const IngredientsStack = createStackNavigator(
 
 IngredientsStack.navigationOptions = {
   tabBarLabel: 'Ingredients',
+  tabBarOptions: {
+    activeTintColor: Colors.primary
+  },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -52,6 +55,9 @@ const LinksStack = createStackNavigator({
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'Links',
+  tabBarOptions: {
+    activeTintColor: Colors.primary
+  },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -66,6 +72,9 @@ const SettingsStack = createStackNavigator({
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
+  tabBarOptions: {
+    activeTintColor: Colors.primary
+  },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
