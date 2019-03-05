@@ -1,8 +1,12 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
+import { SearchBar, ListItem, Icon } from 'react-native-elements';
 import axios from 'axios';
 import { config } from '../constants/Config';
+import { AntDesign } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
+import Styles from '../constants/Styles';
+import { IngredientsList } from '../components/IngredientsList';
 
 export default class SearchIngredientsScreen extends React.Component {
 
@@ -11,12 +15,11 @@ export default class SearchIngredientsScreen extends React.Component {
     super(props);
     this.state = { 
       searchValue: '', 
-      ingredients: [],
-      error: ''
+      ingredients: []
     };
   }
 
-  handleInputChange(searchValue) {
+  handleSearchChange(searchValue) {
     this.setState({ searchValue })
     if (searchValue && searchValue.length > 3) {
       // query the ingredients API
@@ -32,10 +35,30 @@ export default class SearchIngredientsScreen extends React.Component {
         this.setState({ ingredients });
       })
       .catch(error => {
-        console.error(error)
-        this.setState({ error });
+        console.error(error);
       })
     }
+  }
+
+  addIngredient(ingredient){
+    axios({
+      method: 'post',
+      url: `${config.ucookApi}/user/${config.mainUser}/ingredient`,
+      data: ingredient
+    })
+    .then(() => {
+      const ingredients = this.state.ingredients.map(i => {
+        return ingredient._id === i._id ? Object.assign({}, i, {ticked: true}) : i;
+      });
+      this.setState({ ingredients });
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
+
+  removeIngredient() {
+
   }
 
   render() {
@@ -47,20 +70,21 @@ export default class SearchIngredientsScreen extends React.Component {
             inputContainerStyle= {styles.inputStyle}
             containerStyle={styles.searchBar}
             inputStyle={styles.inputStyle}
-            onChangeText={(text) => this.handleInputChange(text)}
+            onChangeText={(text) => this.handleSearchChange(text)}
             value={this.state.searchValue}
             placeholder='Search ingredients...'>
           </SearchBar>
         </View>
         <ScrollView>
           <View>
-            {this.state.ingredients.map((i) => (
-              <ListItem
-                key={i._id}
-                leftIcon={{ name: 'local-pizza' }}
-                title={i.name}
-              />
-            ))}
+          {this.state.ingredients.map((i) => (
+            <IngredientsList
+              {...i}
+              key={i._id}
+              rightIcon={
+                i.ticked ? <AntDesign name='minus' color={Colors.red} size={30} onPress={() => this.removeIngredient(i)} />  :
+                           <Icon name='add' color={Colors.green} size={30} onPress={() => this.addIngredient(i)} />} />
+          ))}
           </View>
         </ScrollView>
       </View>
@@ -72,9 +96,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  searchContainer: {
-    flex: 1
   },
   searchBar: {
     backgroundColor: null,

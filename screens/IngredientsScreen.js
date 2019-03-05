@@ -5,9 +5,14 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Button,
+  Text
 } from 'react-native';
-
+import axios from 'axios';
 import { Icon } from 'react-native-elements';
+import { config } from '../constants/Config';
+import asyncStore from '../storage/asyncStore';
+import { IngredientsList } from '../components/IngredientsList';
 
 export default class IngredientsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -26,21 +31,32 @@ export default class IngredientsScreen extends React.Component {
     }
   };
 
+  constructor(props){
+    super(props);
+    this.state = { ingredients: [] };
+  }
+
+  componentDidMount(){
+    this.props.navigation.addListener('didFocus', () => {
+      axios.get(`${config.ucookApi}/user/${config.mainUser}/ingredient`)
+        .then(res => {
+          const ingredients = res.data;
+          asyncStore.setUserIngredients(ingredients);
+          this.setState({ ingredients });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
+          <View>
+            {this.state.ingredients.map((i) => <IngredientsList key={i._id} {...i} />)}
           </View>
- 
         </ScrollView>
       </View>
     );

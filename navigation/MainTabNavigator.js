@@ -7,11 +7,12 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
 import IngredientsScreen from '../screens/IngredientsScreen';
+import Colors from '../constants/Colors';
 
 const defaultNavigationOptions = {
   defaultNavigationOptions: {
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: Colors.blue,
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -32,7 +33,7 @@ const IngredientsStack = createStackNavigator(
 );
 
 IngredientsStack.navigationOptions = {
-  tabBarLabel: 'IngredientsScreen',
+  tabBarLabel: 'Ingredients',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
