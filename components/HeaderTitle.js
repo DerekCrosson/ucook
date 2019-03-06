@@ -40,11 +40,12 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 20, 
         flexDirection: 'row',
-        backgroundColor: Colors.lightGrey,
+        backgroundColor: '#ececec',
         justifyContent: 'space-between' 
     },
     text: {
-        fontSize: 18
+        fontSize: 18,
+        marginTop: 3
     },  
     icon: {
         color: Colors.primary,

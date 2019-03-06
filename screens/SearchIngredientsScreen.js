@@ -43,7 +43,7 @@ export default class SearchIngredientsScreen extends React.Component {
   }
 
   addIngredient = ingredient => {
-    axios.post(`${config.ucookApi}/user/${config.mainUser}/ingredient`, ingredient)
+    userService.addIngredient(ingredient)
       .then(() => {
         const ingredients = this.state.ingredients.map(i => {
           return ingredient._id === i._id ? Object.assign({}, i, {ticked: true}) : i;
