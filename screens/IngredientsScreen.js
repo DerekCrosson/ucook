@@ -11,7 +11,11 @@ import {
 import axios from 'axios';
 import { Icon } from 'react-native-elements';
 import { config } from '../constants/Config';
-import { IngredientsList } from '../components/IngredientsList';
+import { IngredientItem } from '../components/IngredientsItem';
+import { HeaderTitle } from '../components/HeaderTitle';
+import userService from '../services/user/user.service';
+import {AntDesign} from '@expo/vector-icons';
+
 
 export default class IngredientsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -32,7 +36,10 @@ export default class IngredientsScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = { ingredients: [] };
+    this.state = { 
+      ingredients: [],
+      editing: false
+    };
   }
 
   componentDidMount(){
@@ -51,12 +58,35 @@ export default class IngredientsScreen extends React.Component {
       });
   }
 
+  handleEdit = editing => {
+    this.setState({ editing });
+  }
+
+  removeIngredient = ingredient => {
+    userService.removeIngredient(ingredient)
+      .then(() => {
+        const ingredients = this.state.ingredients.filter(i => i._id !== ingredient._id);
+        this.setState({ ingredients });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <HeaderTitle title='Your Ingredients' editing={this.state.editing} handleEdit={this.handleEdit} />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View>
-            {this.state.ingredients.map((i) => <IngredientsList key={i._id} {...i} />)}
+            {this.state.ingredients.map((i) => (
+              <IngredientItem 
+                key={i._id} 
+                ticked={true}
+                ingredient={i} 
+                handleRemove={this.state.editing && this.removeIngredient}
+                />
+            ))}
           </View>
         </ScrollView>
       </View>
@@ -73,6 +103,7 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   contentContainer: {
-    paddingTop: 30,
+    paddingTop: 10,
+    paddingBottom: 10
   }
 });

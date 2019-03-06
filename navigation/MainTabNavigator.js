@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import LinksScreen from '../screens/LinksScreen';
+import RecipesScreen from '../screens/RecipesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
 import IngredientsScreen from '../screens/IngredientsScreen';
@@ -49,9 +49,15 @@ IngredientsStack.navigationOptions = {
   ),
 };
 
-const RecipesStack = createStackNavigator({
-  Links: LinksScreen,
-});
+const RecipesStack = createStackNavigator(
+  {
+    Recipes: RecipesScreen
+  },
+  {
+    initialRouteName: 'Recipes',
+    ...defaultNavigationOptions
+  }
+);
 
 RecipesStack.navigationOptions = {
   tabBarLabel: 'Recipes',
@@ -66,9 +72,15 @@ RecipesStack.navigationOptions = {
   ),
 };
 
-const ShoppingListStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
+const ShoppingListStack = createStackNavigator(
+  {
+    Settings: SettingsScreen,
+  },
+  {
+    initialRouteName: 'Settings',
+    ...defaultNavigationOptions
+  }
+);
 
 ShoppingListStack.navigationOptions = {
   tabBarLabel: 'Shopping',

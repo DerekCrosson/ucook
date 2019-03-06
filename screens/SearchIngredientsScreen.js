@@ -1,12 +1,10 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SearchBar, ListItem, Icon } from 'react-native-elements';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
 import { config } from '../constants/Config';
-import { AntDesign } from '@expo/vector-icons';
-import Colors from '../constants/Colors';
-import Styles from '../constants/Styles';
-import { IngredientsList } from '../components/IngredientsList';
+import { IngredientItem } from '../components/IngredientsItem';
+import userService from '../services/user/user.service';
 
 export default class SearchIngredientsScreen extends React.Component {
 
@@ -44,7 +42,7 @@ export default class SearchIngredientsScreen extends React.Component {
     }
   }
 
-  addIngredient(ingredient){
+  addIngredient = ingredient => {
     axios.post(`${config.ucookApi}/user/${config.mainUser}/ingredient`, ingredient)
       .then(() => {
         const ingredients = this.state.ingredients.map(i => {
@@ -57,17 +55,14 @@ export default class SearchIngredientsScreen extends React.Component {
       })
   }
 
-  removeIngredient(ingredient) {
-    axios.delete(`${config.ucookApi}/user/${config.mainUser}/ingredient/${ingredient._id}`)
+  removeIngredient = ingredient => {
+    userService.removeIngredient(ingredient)
       .then(() => {
         const ingredients = this.state.ingredients.map(i => {
           return ingredient._id === i._id ? Object.assign({}, i, {ticked: false}) : i;
         });
         this.setState({ ingredients });
-      })
-      .catch(error => {
-        console.error(error);
-      })
+      });
   }
 
   render() {
@@ -87,12 +82,13 @@ export default class SearchIngredientsScreen extends React.Component {
         <ScrollView>
           <View>
           {this.state.ingredients.map((i) => (
-            <IngredientsList
-              {...i}
+            <IngredientItem
               key={i._id}
-              rightIcon={
-                i.ticked ? <AntDesign name='minus' color={Colors.red} size={30} onPress={() => this.removeIngredient(i)} />  :
-                           <Icon name='add' color={Colors.green} size={30} onPress={() => this.addIngredient(i)} />} />
+              ticked={i.ticked}
+              ingredient={i} 
+              handleRemove={this.removeIngredient}
+              handleAdd={this.addIngredient}
+                 />
           ))}
           </View>
         </ScrollView>
