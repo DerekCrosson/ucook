@@ -1,12 +1,8 @@
 import React from 'react';
 import {
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
   View,
-  Button,
-  Text
 } from 'react-native';
 import axios from 'axios';
 import { Icon } from 'react-native-elements';
@@ -14,10 +10,10 @@ import { config } from '../constants/Config';
 import { IngredientItem } from '../components/IngredientsItem';
 import { HeaderTitle } from '../components/HeaderTitle';
 import userService from '../services/user/user.service';
-import {AntDesign} from '@expo/vector-icons';
+import {connect} from 'react-redux';
+import {loadUserIngredients, loadUserIngredientsSuccess} from '../actions';
 
-
-export default class IngredientsScreen extends React.Component {
+class IngredientsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerRight: (
@@ -47,15 +43,17 @@ export default class IngredientsScreen extends React.Component {
   }
 
   getUserIngredients = async () => {
-    axios.get(`${config.ucookApi}/user/${config.mainUser}/ingredient`)
-      .then(async res => {
-        const ingredients = res.data;
-        // save in redux state
-        this.setState({ ingredients });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.props.loadUserIngredients();
+    // axios.get(`${config.ucookApi}/user/${config.mainUser}/ingredient`)
+    //   .then(async res => {
+    //     const ingredients = res.data;
+    //     // save in redux state
+    //     this.props.loadUserIngredientsSuccess(ingredients);
+    //     this.setState({ ingredients });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   handleEdit = editing => {
@@ -79,7 +77,7 @@ export default class IngredientsScreen extends React.Component {
         <HeaderTitle title='Your Ingredients' editing={this.state.editing} handleEdit={this.handleEdit} />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View>
-            {this.state.ingredients.map((i) => (
+            {this.props.ingredients.map((i) => (
               <IngredientItem 
                 key={i._id} 
                 ticked={true}
@@ -93,6 +91,19 @@ export default class IngredientsScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients
+  }
+}
+
+const mapDispatchToProps = { loadUserIngredients, loadUserIngredientsSuccess }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IngredientsScreen) 
 
 const styles = StyleSheet.create({
   container: {

@@ -2,6 +2,16 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger'
+import reducer from './reducers';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+
+const store = createStore(
+  reducer, 
+  applyMiddleware(logger, thunk)
+);
 
 export default class App extends React.Component {
   state = {
@@ -17,12 +27,14 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else {
+    } else { 
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
+        <Provider store={store}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        </Provider>
       );
     }
   }
