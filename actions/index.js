@@ -14,4 +14,4 @@ export const loadUserIngredients = () => {
 export const loadUserIngredientsSuccess = ingredients => ({
     type: 'LOAD_USER_INGREDIENTS_SUCCESS',
     ingredients
-})
+});
