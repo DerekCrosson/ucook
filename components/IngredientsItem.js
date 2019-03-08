@@ -20,12 +20,27 @@ export class IngredientItem extends React.Component {
             rightIcon = <Icon name='add' color={Colors.green} size={30} onPress={() => this.props.handleAdd(this.props.ingredient)} />;
         }
 
+        // try to get the ingredient image
+        var image;
+        if (this.props.ingredient.image) {
+            image = {
+                source: {uri: 'https://spoonacular.com/cdn/ingredients_100x100/' + this.props.ingredient.image}
+            };
+        }
+
+        // otherwise fall back to an icon
+        var leftIcon;
+        if (!image) {
+            leftIcon = <MaterialCommunityIcons name='food-variant' color={Colors.darkGrey} size={30} />;
+        }
+
         return (
             <ListItem
                 containerStyle={Styles.listStyle}
-                leftIcon={ <MaterialCommunityIcons name='food-variant' color={Colors.darkGrey} size={30} />}
+                leftIcon={leftIcon}
+                leftAvatar={image}
                 rightIcon={rightIcon}
-                title={Func.capitalize(this.props.ingredient.name)}
+                title={Func.capitalize(this.props.ingredient.original || this.props.ingredient.name)}
             />
         );
     }

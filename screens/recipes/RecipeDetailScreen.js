@@ -4,6 +4,7 @@ import axios from 'axios';
 import { config } from '../../constants/Config';
 import { RecipeImage } from '../../components/RecipeImage';
 import { Tabs } from '../../components/Tabs';
+import { IngredientItem } from '../../components/IngredientsItem';
 
 export default class RecipeDetailScreen extends React.Component {
   constructor(props){
@@ -43,6 +44,14 @@ export default class RecipeDetailScreen extends React.Component {
             updateIndex={this.updateIndex}
             selectedIndex={selectedIndex}
         />
+        {this.state.selectedIndex === 0 && 
+         this.state.recipe.extendedIngredients && 
+         this.state.recipe.extendedIngredients.map(i => (
+            <IngredientItem 
+                key={i.id} 
+                ingredient={i} 
+            />
+        ))}
       </ScrollView>
     );
   }
