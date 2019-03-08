@@ -24,7 +24,7 @@ describe('ingredients reducer', () => {
     it('should handle ADD_USER_INGREDIENT', () => {
         const ingredient = {_id: 123, id: 321, name: 'cheese'};
         const action = {
-            type: 'ADD_USER_INGREDIENT',
+            type: 'ADD_USER_INGREDIENT_SUCCESS',
             ingredient
         };
         expect(reducer(ingredients, action)).toEqual([ingredient].concat(ingredients));
@@ -32,7 +32,7 @@ describe('ingredients reducer', () => {
     
     it('should handle REMOVE_USER_INGREDIENT', () => {
         const action = {
-            type: 'REMOVE_USER_INGREDIENT',
+            type: 'REMOVE_USER_INGREDIENT_SUCCESS',
             ingredient: {_id: '654321', id: 12345, name: 'eggs'}
         };
         expect(reducer(ingredients, action)).toEqual([{

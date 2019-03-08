@@ -1,14 +1,14 @@
 import React from 'react';
-import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import RecipesScreen from '../screens/RecipesScreen';
+import RecipesScreen from '../screens/recipes/RecipesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SearchIngredientsScreen from '../screens/SearchIngredientsScreen';
 import IngredientsScreen from '../screens/IngredientsScreen';
 import Colors from '../constants/Colors';
 import {MaterialCommunityIcons, MaterialIcons} from '@expo/vector-icons'
+import RecipeDetailScreen from '../screens/recipes/RecipeDetailScreen';
 
 const defaultNavigationOptions = {
   defaultNavigationOptions: {
@@ -51,7 +51,8 @@ IngredientsStack.navigationOptions = {
 
 const RecipesStack = createStackNavigator(
   {
-    Recipes: RecipesScreen
+    Recipes: RecipesScreen,
+    Details: RecipeDetailScreen
   },
   {
     initialRouteName: 'Recipes',
