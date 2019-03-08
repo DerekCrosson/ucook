@@ -4,16 +4,15 @@ import { SearchBar } from 'react-native-elements';
 import axios from 'axios';
 import { config } from '../constants/Config';
 import { IngredientItem } from '../components/IngredientsItem';
-import userService from '../services/user/user.service';
+import {connect} from 'react-redux';
+import {addUserIngredient, removeUserIngredient} from '../actions';
 
-export default class SearchIngredientsScreen extends React.Component {
-
-
+class SearchIngredientsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
       searchValue: '', 
-      ingredients: []
+      searchedIngredients: []
     };
   }
 
@@ -28,13 +27,19 @@ export default class SearchIngredientsScreen extends React.Component {
           search: searchValue
         }
       })
-      .then(async (res) => {
+      .then(res => {
         const ingredients = res.data || [];
-        // TODO add ticked to ingredients if user already has saved
-        // ingredients.map(i => {
-        //   return savedIng.find(item => item._id === i._id) ? Object.assign({}, i, {ticked: true}) : i;
-        // });
-        this.setState({ ingredients });
+        // remove ingredients that have same ID but different name
+        const filtered = ingredients.filter(i => {
+          const found = this.props.ingredients.find(item => item.id === i.id && item.name !== i.name);
+          return found ? null : i;
+        });
+        // mark saved ingredients as ticked
+        const searchedIngredients = filtered.map(i => {
+          const found = this.props.ingredients.find(item => item.id === i.id);
+          return found ? Object.assign({}, i, {ticked: true}) : i
+        });
+        this.setState({ searchedIngredients }); 
       })
       .catch(error => {
         console.error(error);
@@ -43,26 +48,20 @@ export default class SearchIngredientsScreen extends React.Component {
   }
 
   addIngredient = ingredient => {
-    userService.addIngredient(ingredient)
-      .then(() => {
-        const ingredients = this.state.ingredients.map(i => {
-          return ingredient._id === i._id ? Object.assign({}, i, {ticked: true}) : i;
-        });
-        this.setState({ ingredients });
-      })
-      .catch(error => {
-        console.error(error);
-      })
+    this.markIngredientTicked(ingredient, true);
+    this.props.addUserIngredient(ingredient);
   }
 
   removeIngredient = ingredient => {
-    userService.removeIngredient(ingredient)
-      .then(() => {
-        const ingredients = this.state.ingredients.map(i => {
-          return ingredient._id === i._id ? Object.assign({}, i, {ticked: false}) : i;
-        });
-        this.setState({ ingredients });
-      });
+    this.markIngredientTicked(ingredient, false);
+    this.props.removeUserIngredient(ingredient);
+  }
+
+  markIngredientTicked(ingredient, ticked){
+    const searchedIngredients = this.state.searchedIngredients.map(i => {
+      return ingredient._id === i._id ? Object.assign({}, i, {ticked}) : i;
+    });
+    this.setState({ searchedIngredients });
   }
 
   render() {
@@ -73,7 +72,7 @@ export default class SearchIngredientsScreen extends React.Component {
             lightTheme 
             inputContainerStyle= {styles.inputStyle}
             containerStyle={styles.searchBar}
-            inputStyle={styles.inputStyle}
+            inputStyle={styles.inputStyle} 
             onChangeText={(text) => this.handleSearchChange(text)}
             value={this.state.searchValue}
             placeholder='Search ingredients...'>
@@ -81,7 +80,7 @@ export default class SearchIngredientsScreen extends React.Component {
         </View>
         <ScrollView>
           <View>
-          {this.state.ingredients.map((i) => (
+          {this.state.searchedIngredients.map((i) => (
             <IngredientItem
               key={i._id}
               ticked={i.ticked}
@@ -96,6 +95,19 @@ export default class SearchIngredientsScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients
+  }
+}
+
+const mapDispatchToProps = { addUserIngredient, removeUserIngredient }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchIngredientsScreen) 
 
 const styles = StyleSheet.create({
   container: {

@@ -11,7 +11,7 @@ import { IngredientItem } from '../components/IngredientsItem';
 import { HeaderTitle } from '../components/HeaderTitle';
 import userService from '../services/user/user.service';
 import {connect} from 'react-redux';
-import {loadUserIngredients, loadUserIngredientsSuccess} from '../actions';
+import {loadUserIngredients, removeUserIngredient} from '../actions';
 
 class IngredientsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -44,16 +44,6 @@ class IngredientsScreen extends React.Component {
 
   getUserIngredients = async () => {
     this.props.loadUserIngredients();
-    // axios.get(`${config.ucookApi}/user/${config.mainUser}/ingredient`)
-    //   .then(async res => {
-    //     const ingredients = res.data;
-    //     // save in redux state
-    //     this.props.loadUserIngredientsSuccess(ingredients);
-    //     this.setState({ ingredients });
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
   }
 
   handleEdit = editing => {
@@ -61,14 +51,7 @@ class IngredientsScreen extends React.Component {
   }
 
   removeIngredient = ingredient => {
-    userService.removeIngredient(ingredient)
-      .then(() => {
-        const ingredients = this.state.ingredients.filter(i => i._id !== ingredient._id);
-        this.setState({ ingredients });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.props.removeUserIngredient(ingredient);
   }
 
   render() {
@@ -98,7 +81,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { loadUserIngredients, loadUserIngredientsSuccess }
+const mapDispatchToProps = { loadUserIngredients, removeUserIngredient }
 
 export default connect(
   mapStateToProps,
